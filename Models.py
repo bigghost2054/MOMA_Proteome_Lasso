@@ -1,5 +1,17 @@
-import DataProcessing
+'''
+Filename: filename.py
 
+Description:
+
+Authors: name and contact info
+
+Copyright: copyright info if any
+
+Changes:
+    - xx/xx/2018: initial commit
+'''
+
+import DataProcessing
 import pandas as pd
 import numpy  as np
 import glmnet_python
@@ -7,17 +19,23 @@ import glmnet_python
 from sklearn.linear_model import LassoCV
 
 class General_Model:
+    # need class comment section here
+    # description of the class
+
     def __init__(self):
         self.network_data = None
         self.merged_data = None
 
     def load_network_data(self, network_data_path):
+        # function comments
         self.network_data = pd.read_csv(network_data_path, sep = DataProcessing.FILE_DELIMETER, header = None)
 
     def load_data(self, transcriptome_data_path, proteome_data_path, mapping_data_path):
+        # function comments
         self.merged_data = DataProcessing.merge_transcriptome_and_proteome(transcriptome_data_path, proteome_data_path, mapping_data_path)
 
     def lasso(self):
+        # function comments
         expression_column_names_proteome        = list(filter(lambda x: x.startswith(DataProcessing.OUTPUT_COLUMN_NAME_PREFIX_PROTEOME + DataProcessing.PREFIX_DELIMETER_PROTEOME), self.merged_data.columns.tolist()))
         expression_column_names_transcriptome   = list(filter(lambda x: x.startswith(DataProcessing.OUTPUT_COLUMN_NAME_PREFIX_TRANSCRIPTOME + DataProcessing.PREFIX_DELIMETER_TRANSCRIPTOME), self.merged_data.columns.tolist()))
         transcriptome_data = self.merged_data[expression_column_names_transcriptome].as_matrix()
@@ -68,9 +86,10 @@ class General_Model:
         return PCC, proteome_data_predicted, proteome_data
 
     def random_baseline(self, random_set_size = 10, sample_times = 1000):
+        # function comments
         expression_column_names_proteome        = list(filter(lambda x: x.startswith(DataProcessing.OUTPUT_COLUMN_NAME_PREFIX_PROTEOME + DataProcessing.PREFIX_DELIMETER_PROTEOME), self.merged_data.columns.tolist()))
         proteome_data = self.merged_data[expression_column_names_proteome].as_matrix()
-        
+
         PCC = np.zeros((proteome_data.shape[0],1))
         proteome_data_predicted = np.zeros((proteome_data.shape))
 
@@ -96,9 +115,10 @@ class General_Model:
         return PCC, proteome_data_predicted, proteome_data
 
     def mean_baseline(self):
+        # function comments
         expression_column_names_proteome        = list(filter(lambda x: x.startswith(DataProcessing.OUTPUT_COLUMN_NAME_PREFIX_PROTEOME + DataProcessing.PREFIX_DELIMETER_PROTEOME), self.merged_data.columns.tolist()))
         proteome_data = self.merged_data[expression_column_names_proteome].as_matrix()
-        
+
         PCC = np.zeros((proteome_data.shape[0],1))
         proteome_data_predicted = np.zeros((proteome_data.shape))
 
@@ -114,15 +134,16 @@ class General_Model:
             Tmp = pd.concat([proteome_data.take([idx]),proteome_data_predicted.take([idx])],axis = 0).transpose()
             PCC[idx] = Tmp.corr().as_matrix()[0,1]
         return PCC, proteome_data_predicted, proteome_data
-        
+
 
     def query_related_genes_from_protein(self, protein, expression_column_names_transcriptome):
+        # function comments
         genes_in_network_data = self.network_data[0]
         proteins_in_network_data = self.network_data[1]
         hit_genes = []
         hit_transcriptome_data_entry_idx = []
         occurrences = lambda s, lst: (i for i,e in enumerate(lst) if e == s)
-        hit_gene_index = list(occurrences(protein, proteins_in_network_data)) 
+        hit_gene_index = list(occurrences(protein, proteins_in_network_data))
         for i in range(len(hit_gene_index)):
             hit_genes.append(genes_in_network_data[hit_gene_index[i]])
         for idx in range(len(hit_genes)):
@@ -133,7 +154,8 @@ class General_Model:
         return hit_transcriptome_data_entry_idx
 
 
-
+# do we need this part for delivery?
+# and if so, I think we should comment this little better
 
 #For testing
 ori_transcriptome_data_path = "Ecomics.transcriptome.no_avg.v8.txt"
@@ -202,6 +224,6 @@ plt.show()
 
 import pickle
 with open('LassoResult.pkl','wb') as f:
-    pickle.dump([pcc_random, pcc_mean, pcc_ppi, pcc_cpn, pcc_pathway, pcc_tf, pcc_average, 
+    pickle.dump([pcc_random, pcc_mean, pcc_ppi, pcc_cpn, pcc_pathway, pcc_tf, pcc_average,
                  ppi_predicted, cpn_predicted, pathway_predicted, tf_predicted, average_predicted,
                  proteome_data], f)

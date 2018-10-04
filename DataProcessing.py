@@ -1,3 +1,16 @@
+'''
+Filename: filename.py
+
+Description:
+
+Authors: name and contact info
+
+Copyright: copyright info if any
+
+Changes:
+    - xx/xx/2018: initial commit
+'''
+
 import pandas as pd
 import numpy  as np
 
@@ -25,13 +38,13 @@ def normalizeOmics(ori_data_path):
     normalized_y = np.copy(ori_y) #initialize
     for idx in range(n_features):
         normalized_y[:,idx] = (normalized_y[:,idx] - np.min(normalized_y[:,idx]))/(np.max(normalized_y[:,idx]) - np.min(normalized_y[:,idx]))
-    
+
     normalized_y = pd.DataFrame(normalized_y,columns = output_column_names)
     normalized_data = pd.concat([ori_x,normalized_y],axis = 1)
     return normalized_data
 
 def merge_transcriptome_and_proteome(transcriptome_data_path, proteome_data_path, mapping_data_path):
-    #input: 
+    #input:
     #1. transcriptome data path (in tab separated format) with annotation data
     #2. proteome data path (in tab separated format) with annotation data
     #3. mapping data path (in tab separated format without header)
@@ -44,7 +57,7 @@ def merge_transcriptome_and_proteome(transcriptome_data_path, proteome_data_path
     transcriptome_id = list(transcriptome_data[ID_LABEL])
     mapping_data_proteome_id = list(mapping_data.as_matrix()[:,2])
     mapping_data_transcriptome_id = list(mapping_data.as_matrix()[:,1])
-    
+
     queried_transcriptome_entry_idx = []
     for idx in range(len(proteome_id)):
         cur_proteome_id = proteome_id[idx]
