@@ -1,14 +1,13 @@
 '''
-Filename: filename.py
+Filename: DataProcessing.py
 
-Description:
+Description: A class contains methods which perform lasso model and baselines (average and random baseline)
 
-Authors: name and contact info
-
-Copyright: copyright info if any
+Authors: Minseung Kim (msgkim@ucdavis.edu)
+         ChengEn Tan (cetan@ucdavis.edu)
 
 Changes:
-    - xx/xx/2018: initial commit
+    - 10/04/2018: initial commit
 '''
 
 import pandas as pd
@@ -72,7 +71,7 @@ def merge_transcriptome_and_proteome(transcriptome_data_path, proteome_data_path
     return merged_data
 
 
-#For testing
+#For unit testing only
 #ori_transcriptome_data_path = "Ecomics.transcriptome.no_avg.v8.txt"
 #ori_proteome_data_path = "proteome.txt"
 #mapping_data_path = "pair_list_of_transcriptome_proteome.txt"
